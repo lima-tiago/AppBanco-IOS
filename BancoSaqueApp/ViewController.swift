@@ -13,16 +13,16 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        lblN100.alpha = 0
-        lblN50.alpha = 0
-        lblN20.alpha = 0
-        lblN10.alpha = 0
-        lblN5.alpha = 0
-        nNotas100.alpha = 0
-        nNotas50.alpha = 0
-        nNotas20.alpha = 0
-        nNotas10.alpha = 0
-        nNotas5.alpha = 0
+//        lblN100.alpha = 0
+//        lblN50.alpha = 0
+//        lblN20.alpha = 0
+//        lblN10.alpha = 0
+//        lblN5.alpha = 0
+//        nNotas100.alpha = 0
+//        nNotas50.alpha = 0
+//        nNotas20.alpha = 0
+//        nNotas10.alpha = 0
+//        nNotas5.alpha = 0
         
         txtDeposito.keyboardType = UIKeyboardType.decimalPad
         txtSaque.keyboardType = UIKeyboardType.decimalPad
@@ -40,7 +40,9 @@ class ViewController: UIViewController {
     @IBOutlet weak var lblN10: UILabel!
     @IBOutlet weak var nNotas10: UILabel!
     @IBOutlet weak var lblN5: UILabel!
+    @IBOutlet var outraLB5: UILabel!
     @IBOutlet weak var nNotas5: UILabel!
+    @IBOutlet var stackNotas: UIStackView!
     
     var SaldoAtual: Double = 0
     var depositoAtual: Double = 0
@@ -61,17 +63,8 @@ class ViewController: UIViewController {
         txtSaque.text = txtSaque.text?.currencyFormatting()
     }
     
-    func esconderMostrarNotas(i:Int){
-        lblN100.alpha = CGFloat(i)
-        lblN50.alpha = CGFloat(i)
-        lblN20.alpha = CGFloat(i)
-        lblN10.alpha = CGFloat(i)
-        lblN5.alpha = CGFloat(i)
-        nNotas100.alpha = CGFloat(i)
-        nNotas50.alpha = CGFloat(i)
-        nNotas20.alpha = CGFloat(i)
-        nNotas10.alpha = CGFloat(i)
-        nNotas5.alpha = CGFloat(i)
+    func esconderMostrarNotas(_ state: Bool){
+        stackNotas.isHidden = state
     }
     
     func aviso(_ title: String,_ message: String){
@@ -140,13 +133,13 @@ class ViewController: UIViewController {
             valorSaque = saqueParcial(valorSaque, 5, NumeroNotasAtual)
             
             debitar(valor)
-            esconderMostrarNotas(i: 1)
+            esconderMostrarNotas(false)
         }else{
             aviso("Saldo Insuficiente", "Deposite um valor para que possa efetuar o saque")
         }
     }
     
-    @IBAction func saqueDefinido(_ sender: UIButton) {
+    @IBAction func btnSaqueDefinido(_ sender: UIButton) {
         let valorSaque = txtSaque.text?.formatCurrencyDouble()
         if verificarSaldo(valorSaque ?? 0.0) || transacaoMinima(valorSaque ?? 0.0){
             debitar(valorSaque ?? 0.0)
@@ -166,7 +159,7 @@ class ViewController: UIViewController {
         if transacaoMinima(valDep ?? 0.0){
             deposito(valDep ?? 0.0)
             updateSaldo()
-            esconderMostrarNotas(i: 0)
+            esconderMostrarNotas(true)
             limparNotas()
             txtDeposito.text = ""
         } else {
@@ -177,6 +170,7 @@ class ViewController: UIViewController {
     @IBAction func SaqueMaximo(_ sender: UIButton) {
         saque(SaldoAtual)
         updateSaldo()
+        esconderMostrarNotas(false)
     }
 }
 
